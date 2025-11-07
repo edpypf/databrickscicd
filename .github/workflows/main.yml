@@ -28,7 +28,7 @@ jobs:
 
       - name: Extract branch name
         id: extract_branch
-        run: echo "branch=$(echo $[GITHUB_REF#REFS/HEADS/})" >> $GITHUB_OUTPUT
+        run: echo "branch=$(echo ${GITHUB_REF#REFS/HEADS/})" >> $GITHUB_OUTPUT
 
       - name: Update Databricks Repo (Dev)
         run:
