@@ -6,6 +6,7 @@ on:
       - .github/**
     branches:
       - main
+
 jobs:
   deploy-dev:
     runs-on: ubuntu-latest
@@ -14,6 +15,7 @@ jobs:
       DATABRICKS_HOST: ${{ secrets.DEV_DEPLOYMENT_TARGET_URL }}
       DATABRICKS_TOKEN: ${{ secrets.DEV_DEPLOYMENT_TARGET_TOKEN }}
       REPO_PATH: /Workspace/Users/edp.inc@outlook.com/dev-databrickscicd
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -28,13 +30,14 @@ jobs:
 
       - name: Extract branch name
         id: extract_branch
-        run: echo "branch=$(echo ${GITHUB_REF#REFS/HEADS/})" >> $GITHUB_OUTPUT
+        run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
 
       - name: Update Databricks Repo (Dev)
-        run:
-          databricks repos update "${{ env.REPO_PATH }}" \
+        run: |
+          databricks repos update \
+            --path "${{ env.REPO_PATH }}" \
             --branch "${{ steps.extract_branch.outputs.branch }}"
-            
+
   deploy-prod:
     needs: deploy-dev
     runs-on: ubuntu-latest
@@ -43,8 +46,9 @@ jobs:
       DATABRICKS_HOST: ${{ secrets.PROD_DEPLOYMENT_TARGET_URL }}
       DATABRICKS_TOKEN: ${{ secrets.PROD_DEPLOYMENT_TARGET_TOKEN }}
       REPO_PATH: /Workspace/main
+
     steps:
-      - name: Checkout repositor  y
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -57,11 +61,10 @@ jobs:
 
       - name: Extract branch name
         id: extract_branch
-        run: echo "branch=$(echo $[GITHUB_REF#REFS/HEADS/})" >> $GITHUB_OUTPUT
+        run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
 
-      - name: Update Databricks Repo (Dev)
-        run:
-          databricks repos update "${{ env.REPO_PATH }}" \
-            --branch "${{ steps.extract_branch.outputs.branch }}"            
-    
-      
+      - name: Update Databricks Repo (Prod)
+        run: |
+          databricks repos update \
+            --path "${{ env.REPO_PATH }}" \
+            --branch "${{ steps.extract_branch.outputs.branch }}"
