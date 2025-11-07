@@ -14,8 +14,8 @@ jobs:
     env:
       DATABRICKS_HOST: ${{ secrets.DEV_DEPLOYMENT_TARGET_URL }}
       DATABRICKS_TOKEN: ${{ secrets.DEV_DEPLOYMENT_TARGET_TOKEN }}
-      REPO_WORKSPACE_PATH: /Workspace/Users/edp.inc@outlook.com/dev-databrickscicd
-      # 如果你更喜欢使用 repo_id, 可以在下面步骤里从 list 里提取到 REPO_ID
+      REPO_PATH: /Workspace/Users/edp.inc@outlook.com/dev-databrickscicd
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -30,64 +30,11 @@ jobs:
 
       - name: Extract branch name
         id: extract_branch
-        run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
-
-      - name: Find repo id if exists
-        id: find_repo
-        run: |
-          # 列出所有 repos（JSON），尝试按 path 找到 repo_id
-          databricks repos list --output JSON > repos.json
-          python - <<'PY'
-import json,sys
-j=json.load(open('repos.json'))
-target = "${{ env.REPO_WORKSPACE_PATH }}"
-rid = None
-for r in j:
-    # Databricks CLI 输出中可能用 'path' 或 'root' 字段，根据实际调整
-    if r.get('path') == target or r.get('root') == target:
-        rid = r.get('id') or r.get('repo_id')
-        break
-if rid:
-    print("repo_id="+str(rid))
-    sys.exit(0)
-else:
-    print("repo_id=")  # empty -> 表示不存在
-    sys.exit(0)
-PY
-        shell: bash
-
-      - name: Create repo if missing (Dev)
-        if: steps.find_repo.outputs.repo_id == ''
-        run: |
-          echo "Repo not found at $REPO_WORKSPACE_PATH, creating..."
-          # 这里需要你把远端 git url 填入或在 secrets 中保存
-          databricks repos create --url "${{ secrets.DEV_GIT_URL }}" --path "${{ env.REPO_WORKSPACE_PATH }}"
-
-      - name: Get repo id (final)
-        id: get_id
-        run: |
-          databricks repos list --output JSON > repos.json
-          python - <<'PY'
-import json,sys
-j=json.load(open('repos.json'))
-target = "${{ env.REPO_WORKSPACE_PATH }}"
-rid = ""
-for r in j:
-    if r.get('path') == target or r.get('root') == target:
-        rid = str(r.get('id') or r.get('repo_id'))
-        break
-print("repo_id="+rid)
-PY
-        shell: bash
+        run: echo "branch=${GITHUB_REF#refs/heads/}" >> "$GITHUB_OUTPUT"
 
       - name: Update Databricks Repo (Dev)
-        run: |
-          # 如果 repo_id 有值就用 id，否则尝试用 workspace path
-          if [ -n "${{ steps.get_id.outputs.repo_id }}" ]; then
-            databricks repos update "${{ steps.get_id.outputs.repo_id }}" --branch "${{ steps.extract_branch.outputs.branch }}"
-          else
-            databricks repos update "${{ env.REPO_WORKSPACE_PATH }}" --branch "${{ steps.extract_branch.outputs.branch }}"
-          fi
+        run: databricks repos update "${{ env.REPO_PATH }}" --branch "${{ steps.extract_branch.outputs.branch }}"
+
 
   deploy-prod:
     needs: deploy-dev
@@ -96,7 +43,8 @@ PY
     env:
       DATABRICKS_HOST: ${{ secrets.PROD_DEPLOYMENT_TARGET_URL }}
       DATABRICKS_TOKEN: ${{ secrets.PROD_DEPLOYMENT_TARGET_TOKEN }}
-      REPO_WORKSPACE_PATH: /Workspace/main
+      REPO_PATH: /Workspace/main
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -111,24 +59,7 @@ PY
 
       - name: Extract branch name
         id: extract_branch_prod
-        run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+        run: echo "branch=${GITHUB_REF#refs/heads/}" >> "$GITHUB_OUTPUT"
 
       - name: Update Databricks Repo (Prod)
-        run: |
-          databricks repos list --output JSON > repos.json
-          # 优先找到 repo_id 再 update
-          REPO_ID=$(python - <<'PY'
-import json
-j=json.load(open('repos.json'))
-target = "${{ env.REPO_WORKSPACE_PATH }}"
-for r in j:
-    if r.get('path') == target or r.get('root') == target:
-        print(r.get('id') or r.get('repo_id'))
-        break
-PY
-)
-          if [ -n "$REPO_ID" ]; then
-            databricks repos update "$REPO_ID" --branch "${{ steps.extract_branch_prod.outputs.branch }}"
-          else
-            databricks repos update "${{ env.REPO_WORKSPACE_PATH }}" --branch "${{ steps.extract_branch_prod.outputs.branch }}"
-          fi
+        run: databricks repos update "${{ env.REPO_PATH }}" --branch "${{ steps.extract_branch_prod.outputs.branch }}"
