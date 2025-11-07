@@ -43,7 +43,7 @@ jobs:
     env:
       DATABRICKS_HOST: ${{ secrets.PROD_DEPLOYMENT_TARGET_URL }}
       DATABRICKS_TOKEN: ${{ secrets.PROD_DEPLOYMENT_TARGET_TOKEN }}
-      REPO_PATH: /Workspace/main
+      REPO_PATH: /Workspace/Users/edp.inc@outlook.com/prod-databrickscicd
 
     steps:
       - name: Checkout repository
