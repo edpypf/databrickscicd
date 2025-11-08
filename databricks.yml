@@ -10,12 +10,12 @@ environments:
     workspace:
       host: ${{ secrets.DEV_DEPLOYMENT_TARGET_URL }}
       root_path: /Workspace/main/databricks_cicd/dev
-    include:
+    imports:
       - bundle-config/dev.yml
 
   prod:
     workspace:
       host: ${{ secrets.PROD_DEPLOYMENT_TARGET_URL }}
       root_path: /Workspace/main/databricks_cicd/prod
-    include:
+    imports:
       - bundle-config/prod.yml
