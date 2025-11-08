@@ -1,6 +1,20 @@
 bundle:
   name: databricks_cicd_bundle
 
+files:
+  exclude:
+    - .github/**
+    - bundle_config/**
+    - .git/**
+    - tests/**
+    - docs/**
+    - README.md
+    - LICENSE
+    - .gitignore
+    - .databricksignore
+    - **/__pycache__/**
+    - **/*.pyc
+    
 workspace:
   root_path: /Workspace/main/databricks_cicd/${bundle.environment}
 
