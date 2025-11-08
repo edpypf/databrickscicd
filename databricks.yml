@@ -10,6 +10,9 @@ files:
     - bundle_config/**
     - .git/**
     - README.md
+    - .build
+    - state
+    - artifacts
 
 environments:
   dev:
