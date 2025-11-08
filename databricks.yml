@@ -3,7 +3,7 @@ bundle:
 
 workspace:
   # environment-specific workspace root
-  root_path: /Workspace/main/${bundle.environment}/databricks_cicd
+  root_path: /Workspace/main/${bundle.environment}
 
 files:
   include:
