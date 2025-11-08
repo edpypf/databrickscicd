@@ -3,11 +3,11 @@ bundle:
 
 workspace:
   # environment-specific workspace root
-  root_path: /Workspace/main/${bundle.environment}
+  root_path: /Workspace/main/
 
 files:
   include:
-    - Notebooks/**          # include all notebooks recursively
+    - Notebooks/**  # include all notebooks recursively
   exclude:
     - .github/**
     - bundle_config/**
@@ -34,3 +34,4 @@ environments:
       root_path: /Workspace/main/prod/databricks_cicd
     imports:
       - bundle_config/prod.yml
+
