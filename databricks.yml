@@ -8,14 +8,16 @@ environments:
   dev:
     default: true
     workspace:
-      host: ${{ secrets.DEV_DEPLOYMENT_TARGET_URL }}
+      DATABRICKS_HOST: ${{ secrets.DEV_DEPLOYMENT_TARGET_URL }}
+      DATABRICKS_TOKEN: ${{ secrets.DEV_DEPLOYMENT_TARGET_TOKEN }}
       root_path: /Workspace/main/databricks_cicd/dev
     imports:
       - bundle-config/dev.yml
 
   prod:
     workspace:
-      host: ${{ secrets.PROD_DEPLOYMENT_TARGET_URL }}
+      DATABRICKS_HOST: ${{ secrets.PROD_DEPLOYMENT_TARGET_URL }}
+      DATABRICKS_TOKEN: ${{ secrets.PROD_DEPLOYMENT_TARGET_TOKEN }}
       root_path: /Workspace/main/databricks_cicd/prod
     imports:
       - bundle-config/prod.yml
