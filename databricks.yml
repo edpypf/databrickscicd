@@ -16,7 +16,7 @@ files:
     - **/*.pyc
     
 workspace:
-  root_path: /Workspace/main/databricks_cicd/${bundle.environment}
+  root_path: /Workspace/main/databricks_cicd/${bundle.environment}/databricks_cicd
 
 environments:
   dev:
@@ -24,7 +24,7 @@ environments:
     workspace:
       DATABRICKS_HOST: ${{ secrets.DEV_DEPLOYMENT_TARGET_URL }}
       DATABRICKS_TOKEN: ${{ secrets.DEV_DEPLOYMENT_TARGET_TOKEN }}
-      root_path: /Workspace/main/databricks_cicd/dev
+      root_path: /Workspace/main/databricks_cicd/dev/databricks_cicd
     imports:
       - bundle-config/dev.yml
 
@@ -32,6 +32,6 @@ environments:
     workspace:
       DATABRICKS_HOST: ${{ secrets.PROD_DEPLOYMENT_TARGET_URL }}
       DATABRICKS_TOKEN: ${{ secrets.PROD_DEPLOYMENT_TARGET_TOKEN }}
-      root_path: /Workspace/main/databricks_cicd/prod
+      root_path: /Workspace/main/databricks_cicd/prod/databricks_cicd
     imports:
       - bundle-config/prod.yml
