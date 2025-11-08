@@ -21,7 +21,7 @@ jobs:
           python-version: 3.8
       - uses: databricks/setup-cli@main
       - name: Deploy Dev
-        run: databricks bundle deploy --target dev --only workspace
+        run: databricks bundle deploy --target dev
 
   deploy-prod:
     needs: deploy-dev
@@ -37,4 +37,4 @@ jobs:
           python-version: 3.8
       - uses: databricks/setup-cli@main
       - name: Deploy Prod
-        run: databricks bundle deploy --target prod --only workspace
+        run: databricks bundle deploy --target prod
