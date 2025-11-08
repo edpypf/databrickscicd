@@ -1,36 +1,15 @@
 bundle:
   name: databricks_cicd_bundle
-  target: dev
+  targets:
+    dev:
+      workspace:
+        root_path: /Workspace/main/databricks_cicd/dev
+      default: true
+      include:
+        - bundle-config/dev.yml
 
-targets:
-  dev:
-    workspace:
-      host: ${env.DATABRICKS_HOST}
-      root_path: /Workspace/main/databricks_cicd/dev
-    default: true
-
-  prod:
-    workspace:
-      host: ${env.DATABRICKS_HOST}
-      root_path: /Workspace/main/databricks_cicd/prod
-
-resources:
-  jobs:
-    example_job:
-      name: example_job
-      tasks:
-        - task_key: run_notebook
-          notebook_task:
-            notebook_path: /Workspace/main/databricks_cicd/src/example_notebook
-          existing_cluster_id: ${env.CLUSTER_ID}
-
-  pipelines:
-    example_dlt:
-      name: example_dlt_pipeline
-      development: true
-      clusters:
-        - label: default
-          num_workers: 1
-      libraries:
-        - notebook: /Workspace/main/databricks_cicd/src/dlt_pipeline
-      target: dev_dlt
+    prod:
+      workspace:
+        root_path: /Workspace/main/databricks_cicd/prod
+      include:
+        - bundle-config/prod.yml
