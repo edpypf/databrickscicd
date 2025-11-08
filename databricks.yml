@@ -25,12 +25,12 @@ environments:
   dev:
     default: true
     workspace:
-      root_path: /Workspace/main/dev/databricks_cicd
+      root_path: /Workspace/main/dev/
     imports:
       - bundle_config/dev.yml
 
   prod:
     workspace:
-      root_path: /Workspace/main/prod/databricks_cicd
+      root_path: /Workspace/main/prod/
     imports:
       - bundle_config/prod.yml
