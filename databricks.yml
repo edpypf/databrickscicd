@@ -1,7 +1,13 @@
 bundle:
   name: databricks_cicd_bundle
 
+workspace:
+  # environment-specific workspace root
+  root_path: /Workspace/main/${bundle.environment}/databricks_cicd
+
 files:
+  include:
+    - Notebooks/**          # include all notebooks recursively
   exclude:
     - .github/**
     - bundle_config/**
@@ -14,24 +20,17 @@ files:
     - .databricksignore
     - **/__pycache__/**
     - **/*.pyc
-    
-workspace:
-  root_path: /Workspace/main/databricks_cicd/${bundle.environment}/databricks_cicd
 
 environments:
   dev:
     default: true
     workspace:
-      DATABRICKS_HOST: ${{ secrets.DEV_DEPLOYMENT_TARGET_URL }}
-      DATABRICKS_TOKEN: ${{ secrets.DEV_DEPLOYMENT_TARGET_TOKEN }}
-      root_path: /Workspace/main/databricks_cicd/dev/databricks_cicd
+      root_path: /Workspace/main/dev/databricks_cicd
     imports:
-      - bundle-config/dev.yml
+      - bundle_config/dev.yml
 
   prod:
     workspace:
-      DATABRICKS_HOST: ${{ secrets.PROD_DEPLOYMENT_TARGET_URL }}
-      DATABRICKS_TOKEN: ${{ secrets.PROD_DEPLOYMENT_TARGET_TOKEN }}
-      root_path: /Workspace/main/databricks_cicd/prod/databricks_cicd
+      root_path: /Workspace/main/prod/databricks_cicd
     imports:
-      - bundle-config/prod.yml
+      - bundle_config/prod.yml
