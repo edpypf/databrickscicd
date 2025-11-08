@@ -18,7 +18,6 @@ resources:
     dlt_pipeline:
       name: "DLT Pipeline (Dev)"
       development: true
-      edition: CORE
       continuous: true
       clusters:
         - label: default
