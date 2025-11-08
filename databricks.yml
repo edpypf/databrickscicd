@@ -2,37 +2,25 @@ bundle:
   name: databricks_cicd_bundle
 
 workspace:
-  # The root workspace path for all environments.
   root_path: /Workspace/main/databricks_cicd/${bundle.environment}
 
-# 🧹 Exclude non-deployable folders and files (so they aren't synced to Databricks)
 files:
   exclude:
     - .github/**
     - bundle_config/**
     - .git/**
-    - tests/**
-    - docs/**
     - README.md
-    - LICENSE
-    - .gitignore
-    - .databricksignore
-    - **/__pycache__/**
-    - **/*.pyc
 
-# 🏗️ Define environments (dev/prod)
 environments:
   dev:
     default: true
     workspace:
-      # host automatically comes from $DATABRICKS_HOST
       root_path: /Workspace/main/databricks_cicd/dev
     imports:
       - bundle_config/dev.yml
 
   prod:
     workspace:
-      # host automatically comes from $DATABRICKS_HOST
       root_path: /Workspace/main/databricks_cicd/prod
     imports:
       - bundle_config/prod.yml
