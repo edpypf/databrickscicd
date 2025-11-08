@@ -11,7 +11,7 @@ resources:
       tasks:
         - task_key: notebook_task
           notebook_task:
-            notebook_path: /Workspace/main/databricks_cicd/dev/notebooks/example
+            notebook_path: /Workspace/main/dev/databricks_cicd/Notebooks/testNotebook
           job_cluster_key: dev_cluster
 
   pipelines:
