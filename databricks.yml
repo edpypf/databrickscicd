@@ -2,10 +2,8 @@ bundle:
   name: databricks_cicd_bundle
 
 workspace:
-  # dynamically builds the workspace path per environment
   root_path: /Workspace/main/${bundle.environment}/databricks_cicd
 
-# Ignore folders that shouldn't be deployed to Databricks
 files:
   exclude:
     - .github/**
@@ -20,12 +18,10 @@ files:
     - **/__pycache__/**
     - **/*.pyc
 
-# Define environments (modern DAB syntax)
 environments:
   dev:
     default: true
     workspace:
-      # host automatically taken from $DATABRICKS_HOST (GitHub Actions or local)
       root_path: /Workspace/main/dev/databricks_cicd
     imports:
       - bundle_config/dev.yml
