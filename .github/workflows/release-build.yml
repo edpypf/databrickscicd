@@ -16,7 +16,7 @@ jobs:
   code-scan:
     runs-on: ubuntu-latest
     steps:
-      # - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       - name: Run MSDO Code Scan
         uses: ./.github/actions/code-scan
 
