@@ -1,35 +1,31 @@
 bundle:
   name: databricks_cicd_bundle
 
-workspace:
-  root_path: /Workspace/main/databricks_cicd/${bundle.environment}
+# workspace:
+deployment_paths: &deployment_paths
+  root_path: /Workspace/main/databricks_cicd
+  file_path: /Workspace/main/databricks_cicd
+  artifact_path: /Workspace/main/databricks_cicd/deployment/artifacts
+  state_path: /Workspace/main/databricks_cicd/deployment/state
 
-files:
+sync:
+  include:
+    - Notebooks/**
   exclude:
     - .github/**
     - bundle_config/**
     - .git/**
     - README.md
-    - .build
-    - state
-    - artifacts
 
 environments:
   dev:
-    default: true
     workspace:
-      root_path: /Workspace/main/databricks_cicd/dev
-    imports:
-      - bundle_config/dev.yml
-
-  uat:
-    workspace:
-      root_path: /Workspace/main/databricks_cicd/uat
-    imports:
-      - bundle_config/uat.yml
+      <<: *deployment_paths
+    variables:
+      env_name: dev
 
   prod:
     workspace:
-      root_path: /Workspace/main/databricks_cicd/prod
-    imports:
-      - bundle_config/prod.yml
+      <<: *deployment_paths
+    variables:
+      env_name: prod
