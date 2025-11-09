@@ -36,7 +36,7 @@ jobs:
         env:
           JF_URL: https://trialb2qcp1.jfrog.io
         with:
-          oidc-provider-name: edpypf/ADF-CICD@github
+          oidc-provider-name: edpypf/databrickscicd@github
 
       - name: Upload to JFrog
         run: |
