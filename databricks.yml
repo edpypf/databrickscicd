@@ -1,18 +1,19 @@
 bundle:
   name: databricks_cicd_bundle
 
-workspace:
-  root_path: /Workspace/main/databricks_cicd/${bundle.environment}
-
 files:
+  include:
+    - Notebooks/**
   exclude:
     - .github/**
     - bundle_config/**
     - .git/**
+    - tests/**
+    - docs/**
     - README.md
-    - .build
-    - state
-    - artifacts
+    - LICENSE
+    - **/__pycache__/**
+    - **/*.pyc
 
 environments:
   dev:
@@ -21,6 +22,12 @@ environments:
       root_path: /Workspace/main/databricks_cicd/dev
     imports:
       - bundle_config/dev.yml
+
+  uat:
+    workspace:
+      root_path: /Workspace/main/databricks_cicd/uat
+    imports:
+      - bundle_config/uat.yml
 
   prod:
     workspace:
