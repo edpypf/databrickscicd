@@ -1,8 +1,12 @@
 bundle:
   name: databricks_cicd_bundle
 
-workspace:
-  root_path: /Workspace/main/databricks_cicd/${bundle.environment}
+# workspace:
+deployment_paths: &deployment_paths
+  root_path: /Workspace/main/databricks_cicd
+  file_path: /Workspace/main/databricks_cicd
+  artifact_path: /Workspace/main/databricks_cicd/deployment/artifacts
+  state_path: /Workspace/main/databricks_cicd/deployment/state
 
 files:
   exclude:
@@ -13,14 +17,13 @@ files:
 
 environments:
   dev:
-    default: true
     workspace:
-      root_path: /Workspace/main/databricks_cicd/dev
+      <<: *deployment_paths
     imports:
       - bundle_config/dev.yml
 
   prod:
     workspace:
-      root_path: /Workspace/main/databricks_cicd/prod
+      <<: *deployment_paths
     imports:
       - bundle_config/prod.yml
