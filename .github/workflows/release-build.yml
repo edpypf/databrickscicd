@@ -16,7 +16,7 @@ jobs:
   code-scan:
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/actions/code-scan  
+      - uses: ./.github/actions/code-scan/action.yml
   
   build-and-upload:
     needs: code-scan
