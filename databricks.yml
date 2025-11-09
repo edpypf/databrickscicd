@@ -8,8 +8,6 @@ files:
     - .github/**
     - bundle_config/**
     - .git/**
-    - tests/**
-    - docs/**
     - README.md
 
 environments:
