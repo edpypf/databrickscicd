@@ -43,34 +43,37 @@ targets:
     mode: production  # Deploy to a shared (non-user) workspace
     workspace:
       <<: *deployment_paths
-      host: https://adb-4113378154106092.12.azuredatabricks.net/
+    imports:
+      - bundle_config/dev.yml
     # run_as:
     #   user_name: dev.service@databricks.corp
-    variables:
-      env_name: dev
-      data_catalog: ei_dev_catalog
+    # variables:
+    #   env_name: dev
+    #   data_catalog: ei_dev_catalog
 
-  # uat:
-  #   mode: production
-  #   workspace:
-  #     <<: *deployment_paths
-  #     host: https://adb-3424836342847607.7.azuredatabricks.net/
-  #   # run_as:
-  #   #   user_name: uat.service@databricks.corp
-  #   variables:
-  #     env_name: uat
-  #     data_catalog: ei_uat_catalog
+  uat:
+    mode: production
+    workspace:
+      <<: *deployment_paths
+    imports:
+      - bundle_config/uat.yml
+    # run_as:
+    #   user_name: uat.service@databricks.corp
+    # variables:
+    #   env_name: uat
+    #   data_catalog: ei_uat_catalog
 
   prod:
     mode: production
     workspace:
       <<: *deployment_paths
-      host: https://adb-3029815957552623.3.azuredatabricks.net/
+    imports:
+      - bundle_config/prod.yml
     # run_as:
     #   user_name: prod.service@databricks.corp
-    variables:
-      env_name: prod
-      data_catalog: ei_prod_catalog
+    # variables:
+    #   env_name: prod
+    #   data_catalog: ei_prod_catalog
 
 # ===============================================================
 # Synchronization exclusions for Databricks CLI
