@@ -24,10 +24,6 @@ jobs:
     needs: code-scan
     runs-on: ubuntu-latest
     steps:
-      # - uses: actions/checkout@v4
-      - name: Run MSDO Code Scan
-        uses: ./.github/actions/code-scan      
-
       - name: Package Databricks bundle
         run: |
           mkdir -p build_artifact
