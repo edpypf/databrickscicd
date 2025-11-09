@@ -31,7 +31,7 @@ jobs:
 
       - name: Download latest artifact from JFrog
         run: |
-          jfrog rt dl "adf_artifact_repo/databricks_bundle/release/*/databricks_bundle_build.zip" . --sort-by=created --limit=1
+          jfrog rt dl "adf_artifact_repo/databricks_bundle/release/*/databricks_bundle_build.zip" . --sort-by=created --limit=1 --flat
           unzip databricks_bundle_build.zip -d .
 
       - name: Set up Databricks CLI
