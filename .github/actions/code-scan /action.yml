@@ -1,0 +1,13 @@
+name: "Code Scan"
+description: "Run security scanning"
+runs:
+  using: "composite"
+  steps:
+    - name: Install dependencies
+      run: pip install bandit safety
+
+    - name: Run Bandit Scan
+      run: bandit -r .
+
+    - name: Run Safety Check
+      run: safety check
