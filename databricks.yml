@@ -4,14 +4,11 @@ bundle:
 workspace:
   root_path: /Workspace/main/databricks_cicd/${bundle.environment}
 
+# Simple artifact definition to satisfy schema
 artifacts:
   default:
-    path: .
-    exclude:
-      - .github/**
-      - bundle_config/**
-      - .git/**
-      - README.md
+    files:
+      - path: .
 
 environments:
   dev:
@@ -43,7 +40,8 @@ environments:
             - label: default
               num_workers: 2
           libraries:
-            - notebook: /Workspace/main/databricks_cicd/dev/dlt/pipeline_notebook
+            - notebook:
+                path: /Workspace/main/databricks_cicd/dev/dlt/pipeline_notebook
 
   uat:
     workspace:
@@ -73,7 +71,8 @@ environments:
             - label: default
               num_workers: 2
           libraries:
-            - notebook: /Workspace/main/databricks_cicd/uat/dlt/pipeline_notebook
+            - notebook:
+                path: /Workspace/main/databricks_cicd/uat/dlt/pipeline_notebook
 
   prod:
     workspace:
@@ -90,17 +89,4 @@ environments:
                 num_workers: 2
           tasks:
             - task_key: notebook_task
-              notebook_task:
-                notebook_path: /Workspace/main/prod/databricks_cicd/Notebooks/
-              job_cluster_key: prod_cluster
-
-      pipelines:
-        dlt_pipeline:
-          name: "DLT Pipeline (Prod)"
-          development: false
-          continuous: true
-          clusters:
-            - label: default
-              num_workers: 2
-          libraries:
-            - notebook: /Workspace/main/databricks_cicd/prod/dlt/pipeline_notebook
+              notebook
