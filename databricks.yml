@@ -3,136 +3,88 @@ bundle:
   description: Unified CI/CD Bundle for Dev, UAT, and Prod
   version: 1.0.0
 
-# =========================================================
-# Global workspace definition
-# =========================================================
-workspace:
-  root_path: /Workspace/main/databricks_cicd/${bundle.environment}
-
-# =========================================================
-# File sync settings (exclude non-deploy files)
-# =========================================================
+# ===============================================================
+# Default file inclusion and exclusion rules
+# ===============================================================
 files:
   include:
     - Notebooks/**
-    - dlt/**
+    - src/**
+    - jobs/**
   exclude:
     - .github/**
-    - bundle_config/**
     - .git/**
+    - bundle_config/**
     - tests/**
     - docs/**
+    - **/archive/**
+    - **/unit_test_results/**
     - **/__pycache__/**
     - **/*.pyc
     - README.md
     - LICENSE
-
+    
 # =========================================================
-# Dummy artifact definition (required for schema compliance)
+# Global workspace definition
 # =========================================================
-artifacts:
-  default:
-    files:
-      - path: .
+# workspace:
+deployment_paths: &deployment_paths
+  root_path: /Workspace/main/databricks_cicd
+  file_path: /Workspace/main/databricks_cicd
+  artifact_path: /Workspace/main/databricks_cicd/deployment/artifacts
+  state_path: /Workspace/main/databricks_cicd/deployment/state
 
 # =========================================================
 # Environment-specific configurations
 # =========================================================
-environments:
+targets:
 
   dev:
-    default: true
+    mode: production  # Deploy to a shared (non-user) workspace
     workspace:
-      root_path: /Workspace/main/databricks_cicd/dev
-    resources:
-      jobs:
-        main_job:
-          name: "Main Job (Dev)"
-          job_clusters:
-            - job_cluster_key: dev_cluster
-              new_cluster:
-                spark_version: 14.3.x-scala2.12
-                node_type_id: Standard_D3_v2
-                num_workers: 2
-          tasks:
-            - task_key: notebook_task
-              description: "Execute Dev test notebook"
-              notebook_task:
-                notebook_path: /Workspace/main/databricks_cicd/dev/Notebooks/testNotebook
-              job_cluster_key: dev_cluster
+      <<: *deployment_paths
+      host: https://adb-4113378154106092.12.azuredatabricks.net/
+    # run_as:
+    #   user_name: dev.service@databricks.corp
+    variables:
+      env_name: dev
+      data_catalog: ei_dev_catalog
 
-      pipelines:
-        dlt_pipeline:
-          name: "DLT Pipeline (Dev)"
-          development: true
-          continuous: true
-          clusters:
-            - label: default
-              num_workers: 2
-          libraries:
-            - notebook:
-                path: /Workspace/main/databricks_cicd/dev/dlt/pipeline_notebook
-
-  uat:
-    workspace:
-      root_path: /Workspace/main/databricks_cicd/uat
-    resources:
-      jobs:
-        main_job:
-          name: "Main Job (UAT)"
-          job_clusters:
-            - job_cluster_key: uat_cluster
-              new_cluster:
-                spark_version: 14.3.x-scala2.12
-                node_type_id: Standard_D3_v2
-                num_workers: 2
-          tasks:
-            - task_key: notebook_task
-              description: "Run all notebooks in UAT"
-              notebook_task:
-                notebook_path: /Workspace/main/databricks_cicd/uat/Notebooks/testNotebook
-              job_cluster_key: uat_cluster
-
-      pipelines:
-        dlt_pipeline:
-          name: "DLT Pipeline (UAT)"
-          development: false
-          continuous: true
-          clusters:
-            - label: default
-              num_workers: 2
-          libraries:
-            - notebook:
-                path: /Workspace/main/databricks_cicd/uat/dlt/pipeline_notebook
+  # uat:
+  #   mode: production
+  #   workspace:
+  #     <<: *deployment_paths
+  #     host: https://adb-3424836342847607.7.azuredatabricks.net/
+  #   # run_as:
+  #   #   user_name: uat.service@databricks.corp
+  #   variables:
+  #     env_name: uat
+  #     data_catalog: ei_uat_catalog
 
   prod:
+    mode: production
     workspace:
-      root_path: /Workspace/main/databricks_cicd/prod
-    resources:
-      jobs:
-        main_job:
-          name: "Main Job (Prod)"
-          job_clusters:
-            - job_cluster_key: prod_cluster
-              new_cluster:
-                spark_version: 14.3.x-scala2.12
-                node_type_id: Standard_D3_v2
-                num_workers: 3  # higher capacity for production
-          tasks:
-            - task_key: notebook_task
-              description: "Run production notebook"
-              notebook_task:
-                notebook_path: /Workspace/main/databricks_cicd/prod/Notebooks/testNotebook
-              job_cluster_key: prod_cluster
+      <<: *deployment_paths
+      host: https://adb-3029815957552623.3.azuredatabricks.net/
+    # run_as:
+    #   user_name: prod.service@databricks.corp
+    variables:
+      env_name: prod
+      data_catalog: ei_prod_catalog
 
-      pipelines:
-        dlt_pipeline:
-          name: "DLT Pipeline (Prod)"
-          development: false
-          continuous: true
-          clusters:
-            - label: default
-              num_workers: 3
-          libraries:
-            - notebook:
-                path: /Workspace/main/databricks_cicd/prod/dlt/pipeline_notebook
+# ===============================================================
+# Synchronization exclusions for Databricks CLI
+# ===============================================================
+sync:
+  exclude:
+    - .github/**
+    - .git/**
+    - bundle_config/**
+    - tests/**
+    - docs/**
+    - **/archive/**
+    - **/unit_test_results/**
+    - **/__pycache__/**
+    - **/*.pyc
+    - README.md
+    - LICENSE
