@@ -11,7 +11,6 @@ files:
     - tests/**
     - docs/**
     - README.md
-    - LICENSE
 
 environments:
   dev:
