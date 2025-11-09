@@ -21,11 +21,11 @@ environments:
   dev:
     workspace:
       <<: *deployment_paths
-    # imports:
+    imports:
       - bundle_config/dev.yml
 
   prod:
     workspace:
       <<: *deployment_paths
-    # imports:
+    imports:
       - bundle_config/prod.yml
