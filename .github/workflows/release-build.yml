@@ -27,7 +27,9 @@ jobs:
       - name: Package Databricks bundle
         run: |
           mkdir -p build_artifact
+          ls -al
           rsync -av --exclude='archive/' --exclude='unit_test_results/' ./ build_artifact/
+          ls -al build_artifact
           zip -r databricks_bundle_build.zip build_artifact
 
       # 🧩 Setup JFrog CLI with OIDC
