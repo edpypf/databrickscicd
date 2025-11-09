@@ -9,6 +9,8 @@ deployment_paths: &deployment_paths
   state_path: /Workspace/main/databricks_cicd/deployment/state
 
 files:
+  include:
+    - Notebooks/**
   exclude:
     - .github/**
     - bundle_config/**
