@@ -30,7 +30,7 @@ jobs:
           ref: ${{ github.event.pull_request.base.ref }}
 
       - name: Show base branch name
-        run: echo "Release branch is ref: ref: ${{ github.event.pull_request.base.ref }}"
+        run: 'echo "Release branch is ref: ref: ${{ github.event.pull_request.base.ref }}"'
 
       - name: Package Databricks bundle
         run: |
