@@ -12,8 +12,6 @@ files:
     - docs/**
     - README.md
     - LICENSE
-    - **/__pycache__/**
-    - **/*.pyc
 
 environments:
   dev:
