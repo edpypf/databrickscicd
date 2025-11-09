@@ -35,7 +35,7 @@ jobs:
           unzip databricks_bundle_prod.zip -d .
 
       - name: Setup Databricks CLI
-        uses: databricks/setup-cli@main
+        uses: databricks/setup-cli@dev_collaboration
 
       - name: Validate Databricks bundle
         run: databricks bundle validate --target prod
