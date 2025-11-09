@@ -1,0 +1,44 @@
+name: Build, Scan, and Upload to JFrog (Release → UAT)
+
+on:
+  push:
+    branches:
+      - release/*
+    paths-ignore:
+      - .github/**
+      - bundle_config/**
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  code-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/code-scan/action.yml
+  
+  build-and-upload:
+    needs: code-scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Package Databricks bundle
+        run: |
+          mkdir -p build_artifact
+          rsync -av --exclude='archive/' --exclude='unit_test_results/' ./ build_artifact/
+          zip -r databricks_bundle_build.zip build_artifact
+
+      # 🧩 Setup JFrog CLI with OIDC
+      - name: Setup JFrog CLI
+        uses: jfrog/setup-jfrog-cli@v4
+        env:
+          JF_URL: https://trialb2qcp1.jfrog.io
+        with:
+          oidc-provider-name: edpypf/ADF-CICD@github
+
+      - name: Upload to JFrog
+        run: |
+          jfrog rt u "databricks_bundle_build.zip" \
+            "adf_artifact_repo/databricks_bundle/release/${{ github.run_number }}/" --flat=true

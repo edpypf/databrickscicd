@@ -1,0 +1,37 @@
+name: Build and Upload to JFrog (Prod Release)
+
+on:
+  push:
+    branches:
+      - prod/*
+    paths-ignore:
+      - .github/**
+      - bundle_config/**
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-prod:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Package Databricks bundle for Prod
+        run: |
+          mkdir -p build_artifact
+          rsync -av --exclude='archive/' --exclude='unit_test_results/' ./ build_artifact/
+          zip -r databricks_bundle_prod.zip build_artifact
+
+      - name: Setup JFrog CLI (OIDC)
+        uses: jfrog/setup-jfrog-cli@v4
+        env:
+          JF_URL: https://trialb2qcp1.jfrog.io
+        with:
+          oidc-provider-name: edpypf/ADF-CICD@github
+
+      - name: Upload Prod artifact
+        run: |
+          jfrog rt u "databricks_bundle_prod.zip" \
+            "adf_artifact_repo/databricks_bundle/prod/${{ github.run_number }}/" --flat=true
