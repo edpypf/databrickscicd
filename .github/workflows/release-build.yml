@@ -24,6 +24,11 @@ jobs:
     needs: code-scan
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout release branch
+        uses: actions/checkout@v3
+        with:
+          ref: release
+          
       - name: Package Databricks bundle
         run: |
           pwd
