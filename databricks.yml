@@ -1,14 +1,18 @@
 bundle:
   name: databricks_cicd_bundle
 
+workspace:
+  root_path: /Workspace/main/databricks_cicd/${bundle.environment}
+
 files:
-  include:
-    - Notebooks/**
   exclude:
     - .github/**
     - bundle_config/**
     - .git/**
     - README.md
+    - .build
+    - state
+    - artifacts
 
 environments:
   dev:
