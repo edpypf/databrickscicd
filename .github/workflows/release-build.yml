@@ -16,15 +16,17 @@ jobs:
   code-scan:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      # - uses: actions/checkout@v4
       - name: Run MSDO Code Scan
-        uses: ./code-scan.yml
+        uses: ./.github/actions/code-scan
 
   build-and-upload:
     needs: code-scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      # - uses: actions/checkout@v4
+      - name: Run MSDO Code Scan
+        uses: ./.github/actions/code-scan      
 
       - name: Package Databricks bundle
         run: |
