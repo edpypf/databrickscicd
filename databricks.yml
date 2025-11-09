@@ -24,11 +24,11 @@ environments:
     variables:
       env_name: dev
 
-    uat:
-      workspace:
-        <<: *deployment_paths
-      variables:
-        env_name: uat      
+  uat:
+    workspace:
+      <<: *deployment_paths
+    variables:
+      env_name: uat      
 
   prod:
     workspace:
