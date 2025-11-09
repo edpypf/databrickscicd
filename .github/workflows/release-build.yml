@@ -27,10 +27,10 @@ jobs:
       - name: Checkout release branch
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.pull_request.base.ref }}
+          ref: ${{ github.ref }}
 
       - name: Show base branch name
-        run: echo "Release branch is ${{ github.event.pull_request.base.ref }}"
+        run: echo "Release branch is ref: ${{ github.ref }}"
 
       - name: Package Databricks bundle
         run: |
