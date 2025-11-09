@@ -37,10 +37,8 @@ jobs:
           pwd
           mkdir -p build_artifact
           ls -al
-          rsync -av --exclude='archive/' --exclude='unit_test_results/' ./ build_artifact/
+          rsync -av --exclude='.git/' --exclude='archive/' --exclude='unit_test_results/' ./ build_artifact/
           ls -al build_artifact
-          cd build_artifact
-          ls -R databricks_bundle_build.zip
           zip -r databricks_bundle_build.zip build_artifact
 
       # 🧩 Setup JFrog CLI with OIDC
