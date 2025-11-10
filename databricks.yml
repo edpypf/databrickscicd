@@ -1,7 +1,6 @@
 bundle:
   name: databricks_cicd_bundle
 
-# workspace:
 deployment_paths: &deployment_paths
   root_path: /Workspace/main/databricks_cicd
   file_path: /Workspace/main/databricks_cicd
@@ -22,16 +21,19 @@ environments:
     workspace:
       <<: *deployment_paths
     variables:
-      env_name: dev
+      env_name:
+        value: dev
 
   uat:
     workspace:
       <<: *deployment_paths
     variables:
-      env_name: uat      
+      env_name:
+        value: uat
 
   prod:
     workspace:
       <<: *deployment_paths
     variables:
-      env_name: prod
+      env_name:
+        value: prod
