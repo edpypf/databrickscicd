@@ -7,6 +7,11 @@ deployment_paths: &deployment_paths
   artifact_path: /Workspace/main/databricks_cicd/deployment/artifacts
   state_path: /Workspace/main/databricks_cicd/deployment/state
 
+variables:
+  env_name:
+    description: "Environment name (dev/uat/prod)"
+    default: dev
+    
 sync:
   include:
     - Notebooks/**
