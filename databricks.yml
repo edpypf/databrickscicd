@@ -26,19 +26,19 @@ environments:
     workspace:
       <<: *deployment_paths
     variables:
-      env_name:
+      env_name: 
         value: dev
 
   uat:
     workspace:
       <<: *deployment_paths
     variables:
-      env_name:
+      env_name: 
         value: uat
 
   prod:
     workspace:
       <<: *deployment_paths
     variables:
-      env_name:
+      env_name: 
         value: prod
