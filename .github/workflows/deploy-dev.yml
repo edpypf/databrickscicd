@@ -25,7 +25,7 @@ jobs:
           python-version: "3.8"
 
       - name: Set up Databricks CLI
-        uses: databricks/setup-cli@amin
+        uses: databricks/setup-cli@main
 
       # - name: Validate Databricks bundle
       #   run: databricks bundle validate --target dev
