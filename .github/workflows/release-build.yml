@@ -24,11 +24,20 @@ jobs:
     needs: code-scan
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout release branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+
+      - name: Show base branch name
+        run: 'echo "Release branch is ref: ref: ${{ github.event.pull_request.base.ref }}"'
+
       - name: Package Databricks bundle
         run: |
+          pwd
           mkdir -p build_artifact
           ls -al
-          rsync -av --exclude='archive/' --exclude='unit_test_results/' ./ build_artifact/
+          rsync -av --exclude='.git/' --exclude='archive/' --exclude='unit_test_results/' ./ build_artifact/
           ls -al build_artifact
           zip -r databricks_bundle_build.zip build_artifact
 
