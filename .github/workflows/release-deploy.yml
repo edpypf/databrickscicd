@@ -15,8 +15,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DATABRICKS_TOKEN: ${{ secrets.UAT_DEPLOYMENT_TARGET_URL }}
-      DATABRICKS_HOST: ${{ secrets.UAT_DEPLOYMENT_TARGET_TOKEN }}
+      DATABRICKS_HOST: ${{ secrets.UAT_DEPLOYMENT_TARGET_URL }}
+      DATABRICKS_TOKEN: ${{ secrets.UAT_DEPLOYMENT_TARGET_TOKEN }}
       JF_URL: https://trialb2qcp1.jfrog.io
 
     steps:
@@ -37,8 +37,8 @@ jobs:
       - name: Set up Databricks CLI
         uses: databricks/setup-cli@main
 
-      # - name: Validate Databricks bundle
-      #   run: databricks bundle validate --target uat
+      - name: Validate Databricks bundle
+        run: databricks bundle validate --target uat
 
       - name: Deploy to UAT
         run: databricks bundle deploy --target uat
