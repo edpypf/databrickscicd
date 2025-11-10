@@ -24,3 +24,4 @@ resources:
           num_workers: 2
       libraries:
         - notebook: /Workspace/main/databricks_cicd/dev/dlt/pipeline_notebook
+        

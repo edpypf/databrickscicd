@@ -1,0 +1,25 @@
+name: "Code Scan"
+description: "Run Python security and dependency scans"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install scanning tools
+      run: pip install bandit safety
+      shell: bash
+
+    - name: Run Bandit scan (security)
+      run: bandit -r .
+      shell: bash
+
+    - name: Run Safety check (dependencies)
+      run: safety check
+      shell: bash

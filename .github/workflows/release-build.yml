@@ -18,18 +18,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run MSDO Code Scan
-        uses: ./code-scan.yml
+        uses: ./.github/actions/code-scan
 
   build-and-upload:
     needs: code-scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout release branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+
+      - name: Show base branch name
+        run: 'echo "Release branch is ref: ref: ${{ github.event.pull_request.base.ref }}"'
 
       - name: Package Databricks bundle
         run: |
+          pwd
           mkdir -p build_artifact
-          rsync -av --exclude='archive/' --exclude='unit_test_results/' ./ build_artifact/
+          ls -al
+          rsync -av --exclude='.git/' --exclude='archive/' --exclude='unit_test_results/' ./ build_artifact/
+          ls -al build_artifact
           zip -r databricks_bundle_build.zip build_artifact
 
       # 🧩 Setup JFrog CLI with OIDC
@@ -38,7 +47,7 @@ jobs:
         env:
           JF_URL: https://trialb2qcp1.jfrog.io
         with:
-          oidc-provider-name: edpypf/ADF-CICD@github
+          oidc-provider-name: edpypf/databrickscicd@github
 
       - name: Upload to JFrog
         run: |
