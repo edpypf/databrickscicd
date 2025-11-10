@@ -25,13 +25,13 @@ jobs:
       - name: Setup JFrog CLI
         uses: jfrog/setup-jfrog-cli@v4
         with:
-          oidc-provider-name: edpypf/ADF-CICD@github
+          oidc-provider-name: edpypf/databrickscicd@github
         env:
           JF_URL: ${{ env.JF_URL }}
 
       - name: Download latest Prod artifact
         run: |
-          jfrog rt dl "adf_artifact_repo/databricks_bundle/prod/*/databricks_bundle_prod.zip" . --sort-by=created --limit=1
+          jfrog rt dl "adf_artifact_repo/databricks_bundle_prod/*/databricks_bundle_prod.zip" . --sort-by=created --limit=1
           unzip databricks_bundle_prod.zip -d .
 
       - name: Setup Databricks CLI

@@ -3,7 +3,7 @@ name: Build and Upload to JFrog (Prod Release)
 on:
   push:
     branches:
-      - prod/*
+      - main/*
     paths-ignore:
       - .github/**
       - bundle_config/**
@@ -13,25 +13,43 @@ permissions:
   contents: read
 
 jobs:
-  build-prod:
+  code-scan:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Run MSDO Code Scan
+        uses: ./.github/actions/code-scan
+
+  build-and-upload:
+    needs: code-scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout release branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+
+      - name: Show base branch name
+        run: 'echo "Release branch is ref: ref: ${{ github.event.pull_request.base.ref }}"'
 
       - name: Package Databricks bundle for Prod
         run: |
-          mkdir -p build_artifact
-          rsync -av --exclude='archive/' --exclude='unit_test_results/' ./ build_artifact/
-          zip -r databricks_bundle_prod.zip build_artifact
+          pwd
+          mkdir -p build_artifact_prod
+          ls -al
+          rsync -av --exclude='.git/' --exclude='archive/' --exclude='unit_test_results/' ./ build_artifact_prod/
+          ls -al build_artifact_prod
+          zip -r databricks_bundle_build_prod.zip build_artifact_prod
 
-      - name: Setup JFrog CLI (OIDC)
+      # 🧩 Setup JFrog CLI with OIDC
+      - name: Setup JFrog CLI
         uses: jfrog/setup-jfrog-cli@v4
         env:
           JF_URL: https://trialb2qcp1.jfrog.io
         with:
-          oidc-provider-name: edpypf/ADF-CICD@github
+          oidc-provider-name: edpypf/databrickscicd@github
 
-      - name: Upload Prod artifact
+      - name: Upload to JFrog
         run: |
-          jfrog rt u "databricks_bundle_prod.zip" \
-            "adf_artifact_repo/databricks_bundle/prod/${{ github.run_number }}/" --flat=true
+          jfrog rt u "databricks_bundle_build_prod.zip" \
+            "adf_artifact_repo/databricks_bundle_prod/release/${{ github.run_number }}/" --flat=true
