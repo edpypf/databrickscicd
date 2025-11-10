@@ -3,7 +3,7 @@ name: Build and Upload to JFrog (Prod Release)
 on:
   push:
     branches:
-      - main/*
+      - main
     paths-ignore:
       - .github/**
       - bundle_config/**
